@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Video Data</title>
+  <title>MRI - VIDEOS PORTAL </title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -23,45 +23,211 @@
   <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
   
   <style>
-    /* Button Styles */
+    /* Custom Button Styles */
     .btn {
-      padding: 0.25rem 0.5rem;
+      padding: 0.5rem 0.75rem;
       border-radius: 0.25rem;
       font-weight: bold;
       text-align: center;
       color: white;
       text-decoration: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+      font-size: 0.875rem; /* Reduced font size */
     }
-    .btn-watch { background-color: #ff0000; } /* Red */
+    .btn-watch { background-color: #e74c3c; } /* Red */
+    .btn-watch:hover { background-color: #c0392b; }
     .btn-contact { background-color: #f1c40f; color: #333; } /* Yellow */
+    .btn-contact:hover { background-color: #d4ac0d; }
     .btn-code { background-color: #27ae60; } /* Green */
+    .btn-code:hover { background-color: #1e8449; }
     .btn-views { background-color: #a9dfbf; color: #333; } /* Light Green */
-
-    /* DataTable header and row colors */
+    .btn-views:hover { background-color: #7dcea0; }
+    .btn-contact-header { background-color: #1f2937; color: white; }
+    .btn-contact-header:hover { background-color: #111827; }
+    .btn-blue { background-color: #3490dc; }
+    .btn-blue:hover { background-color: #2779bd; }
+    
+    /* DataTable Styles */
     #videoTable thead th {
       background-color: #1f2937;
       color: white;
+      text-align: left;
+      padding: 0.5rem;
+      font-size: 0.95rem; /* Slightly reduced font size */
+    }
+    #videoTable tbody td {
+      padding: 0.5rem;
+      vertical-align: middle;
+      white-space: nowrap;
+      font-size: 0.875rem; /* Reduced font size */
     }
     #videoTable tbody tr:hover {
       background-color: #f3f4f6;
+    }
+
+    /* Fixed Table Layout to Prevent Scrollbar */
+    #videoTable {
+      table-layout: fixed;
+      width: 100%;
+    }
+    #videoTable th, #videoTable td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Chat Box Styles */
+    .chat-box {
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      width: 320px;
+      max-width: 90%;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    .chat-box-header {
+      background-color: #1f2937;
+      color: white;
+      padding: 0.75rem;
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-box-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    .chat-box-body {
+      padding: 0.75rem;
+      overflow-y: auto;
+      max-height: 300px;
+    }
+    .chat-box-footer {
+      padding: 0.75rem;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .chat-toggle {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #1f2937;
+      color: white;
+      padding: 0.75rem;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 1001;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    .chat-toggle:hover {
+      background-color: #111827;
+    }
+    /* Scrollbar Styles for Chat Box */
+    .chat-box-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chat-box-body::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+    }
+    /* Responsive Table */
+    @media (max-width: 768px) {
+      #videoTable thead {
+        display: none;
+      }
+      #videoTable tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        background-color: white;
+      }
+      #videoTable tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+        border: none;
+        border-bottom: 1px solid #ddd;
+      }
+      #videoTable tbody td:last-child {
+        border-bottom: none;
+      }
+      #videoTable tbody td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        width: 40%;
+        text-align: left;
+      }
     }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
   
+  <!-- Header -->
+  <header class="bg-white shadow">
+    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-gray-800">MRI VIDEO PORTAL</h1>
+      <a href="https://wa.me/923224083545?text=I%20have%20a%20custom%20project%20here%20I%20will%20share%20my%20details%20with%20you." target="_blank" class="btn btn-contact-header flex items-center space-x-2">
+        <span>📞</span>
+        <span>+92 322 4083545</span>
+      </a>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
   <div class="container mx-auto p-4 flex-grow">
-    <h2 class="text-3xl font-bold mb-6 text-center">Video Data</h2>
+    <h2 class="text-3xl font-bold mb-4 text-center">ALL VIDEOS LINK AND TITLES OF MY CHANNEL</h2>
     
-    <div class="overflow-x-auto">
-      <table id="videoTable" class="display nowrap stripe hover" style="width:100%">
+    <!-- Data Count and Sorting Controls -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+      <div id="dataCount" class="text-gray-600 mb-2 md:mb-0">
+        <!-- Number of videos will be displayed here -->
+      </div>
+      <div class="flex space-x-2">
+        <button id="sortAsc" class="btn btn-blue flex items-center space-x-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+          </svg>
+          <span>Sort Ascending</span>
+        </button>
+        <button id="sortDesc" class="btn btn-blue flex items-center space-x-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+          <span>Sort Descending</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Removed overflow-x-auto to eliminate horizontal scrollbar -->
+    <div>
+      <table id="videoTable" class="min-w-full bg-white rounded-lg" style="width:100%">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>URL</th>
-            <th>Views</th>
-            <th>Contact Us</th>
-            <th>Code</th>
+            <th style="width:60%;">Title</th>
+            <th style="width:10%;">URL</th>
+            <th style="width:10%;">Views</th>
+            <th style="width:10%;">Contact Us</th>
+            <th style="width:10%;">Code</th>
           </tr>
         </thead>
         <tbody>
@@ -75,10 +241,53 @@
     <p class="text-gray-600">&copy; 2024 Your Company. All rights reserved.</p>
   </footer>
   
+  <!-- Chat Toggle Button -->
+  <div class="chat-toggle" id="chatToggle" title="Chat with us!">
+    💬
+  </div>
+  
+  <!-- Chat Box -->
+  <div class="chat-box" id="chatBox">
+    <div class="chat-box-header">
+      <h3>Contact Us</h3>
+      <button id="closeChat" class="text-white text-xl">&times;</button>
+    </div>
+    <div class="chat-box-body">
+      <form id="chatForm">
+        <div class="mb-3">
+          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+          <input type="text" id="name" name="name" required class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="mb-3">
+          <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+          <select id="gender" name="gender" required class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+          <input type="text" id="country" name="country" required class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="mb-3">
+          <label for="query" class="block text-sm font-medium text-gray-700">Your Query</label>
+          <textarea id="query" name="query" rows="3" required class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+        <div class="chat-box-footer">
+          <button type="submit" class="btn btn-blue">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
   <script>
     $(document).ready(function() {
       // Replace with your actual Google Apps Script Web App URL
       const scriptURL = 'https://script.google.com/macros/s/AKfycbx2mkY2x6YZmj8Hecjq5X7hlOUBC6T9HqkTHarrt-_Yzm4PaKwnqRXmpDTCv3ZriLjX/exec';
+
+      let table; // To hold the DataTable instance
 
       // Fetch data from Google Apps Script
       fetch(scriptURL)
@@ -86,31 +295,48 @@
         .then(data => {
           // Populate table body with fetched data
           data.forEach(video => {
-            const encodedTitle = encodeURIComponent(video.title);
             const message = `Hello! I'm interested in the video titled "${video.title}". Here’s the link: ${video.url}`;
 
             $('#videoTable tbody').append(`
               <tr>
-                <td class="px-4 py-2 font-semibold text-primary">${video.title}</td>
-                <td class="px-4 py-2">
-                  <a href="${video.url}" target="_blank" class="btn btn-watch">Watch</a>
+                <td class="font-semibold text-gray-800" data-label="Title">${video.title}</td>
+                <td class="text-center" data-label="URL">
+                  <a href="${video.url}" target="_blank" class="btn btn-watch flex items-center space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 8l4.553 2.276A1 1 0 0010 10.618v6.764a1 1 0 01-1.447.894L5 14" />
+                    </svg>
+                    <span>Watch</span>
+                  </a>
                 </td>
-                <td class="px-4 py-2">
+                <td class="text-center" data-label="Views">
                   <span class="btn btn-views">${video.views}</span>
                 </td>
-                <td class="px-4 py-2">
-                  <a href="https://wa.me/923224083545" target="_blank" class="btn btn-contact">Contact Us</a>
+                <td class="text-center" data-label="Contact Us">
+                  <a href="https://wa.me/923224083545" target="_blank" class="btn btn-contact flex items-center space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-3.582 8-8 8H11l-4 4v-4H5a10.014 10.014 0 01-4-7c0-5.523 4.477-10 10-10s10 4.477 10 10z" />
+                    </svg>
+                    <span>Contact Us</span>
+                  </a>
                 </td>
-                <td class="px-4 py-2">
-                  <a href="https://wa.me/923224083545?text=${encodeURIComponent(message)}" target="_blank" class="btn btn-code">Code</a>
+                <td class="text-center" data-label="Code">
+                  <a href="https://wa.me/923224083545?text=${encodeURIComponent(message)}" target="_blank" class="btn btn-code flex items-center space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 18v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2m16 0h-4m0 0v-4m0 4l4-4-4-4" />
+                    </svg>
+                    <span>Code</span>
+                  </a>
                 </td>
               </tr>
             `);
           });
 
-          // Initialize DataTable with responsive feature
-          $('#videoTable').DataTable({
-            responsive: true,
+          // Display data count
+          $('#dataCount').text(`Total Videos Found: ${data.length}`);
+
+          // Initialize DataTable without responsive plus icon
+          table = $('#videoTable').DataTable({
+            responsive: false, // Disable responsive to prevent plus icon
             language: {
               search: "Search:",
               lengthMenu: "Show _MENU_ entries",
@@ -119,10 +345,66 @@
                 previous: "Previous",
                 next: "Next"
               }
-            }
+            },
+            // Adjust column widths to prevent wrapping
+            columnDefs: [
+              { width: '60%', targets: 0 },
+              { width: '10%', targets: 1 },
+              { width: '10%', targets: 2 },
+              { width: '10%', targets: 3 },
+              { width: '10%', targets: 4 }
+            ],
+            // Prevent DataTables from auto adjusting column widths
+            autoWidth: false
           });
         })
         .catch(error => console.error('Error fetching data:', error));
+
+      // Sorting controls
+      $('#sortAsc').on('click', function() {
+        table.order([0, 'asc']).draw();
+      });
+
+      $('#sortDesc').on('click', function() {
+        table.order([0, 'desc']).draw();
+      });
+
+      // Chat Box Toggle
+      const chatToggle = $('#chatToggle');
+      const chatBox = $('#chatBox');
+      const closeChat = $('#closeChat');
+
+      chatToggle.on('click', function() {
+        chatBox.fadeIn();
+        chatToggle.hide();
+      });
+
+      closeChat.on('click', function() {
+        chatBox.fadeOut();
+        chatToggle.fadeIn();
+      });
+
+      // Handle Chat Form Submission
+      $('#chatForm').on('submit', function(e) {
+        e.preventDefault();
+        const name = $('#name').val().trim();
+        const gender = $('#gender').val();
+        const country = $('#country').val().trim();
+        const query = $('#query').val().trim();
+
+        if (name && gender && country && query) {
+          // You can process the form data here, e.g., send to your server or WhatsApp
+          const whatsappMessage = `Name: ${name}%0AGender: ${gender}%0ACountry: ${country}%0AQuery: ${query}`;
+          window.open(`https://wa.me/923224083545?text=${whatsappMessage}`, '_blank');
+
+          // Reset form and close chat box
+          $('#chatForm')[0].reset();
+          chatBox.fadeOut();
+          chatToggle.fadeIn();
+        } else {
+          alert('Please fill in all fields.');
+        }
+      });
     });
   </script>
   
