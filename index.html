@@ -1,27 +1,28 @@
+<!-- MRI Videos Portal -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MRI - VIDEOS PORTAL </title>
-  
+  <title>MRI - VIDEOS PORTAL</title>
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
-  
+
   <!-- Optional: DataTables Tailwind Integration (for better styling) -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.tailwind.min.css">
-  
+
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  
+
   <!-- DataTables JS -->
   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-  
+
   <style>
     /* Custom Button Styles */
     .btn {
@@ -49,7 +50,7 @@
     .btn-contact-header:hover { background-color: #111827; }
     .btn-blue { background-color: #3490dc; }
     .btn-blue:hover { background-color: #2779bd; }
-    
+
     /* DataTable Styles */
     #videoTable thead th {
       background-color: #1f2937;
@@ -181,7 +182,7 @@
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
-  
+
   <!-- Header -->
   <header class="bg-white shadow">
     <div class="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -192,7 +193,7 @@
       </a>
     </div>
   </header>
-  
+
   <!-- Main Content -->
   <div class="container mx-auto p-4 flex-grow">
     <h2 class="text-3xl font-bold mb-4 text-center">ALL VIDEOS LINK AND TITLES OF MY CHANNEL</h2>
@@ -218,7 +219,7 @@
         </button>
       </div>
     </div>
-    
+
     <!-- Removed overflow-x-auto to eliminate horizontal scrollbar -->
     <div>
       <table id="videoTable" class="min-w-full bg-white rounded-lg" style="width:100%">
@@ -237,16 +238,16 @@
       </table>
     </div>
   </div>
-  
+
   <footer class="bg-white text-center py-4">
     <p class="text-gray-600">&copy; 2024 Your Company. All rights reserved.</p>
   </footer>
-  
+
   <!-- Chat Toggle Button -->
   <div class="chat-toggle" id="chatToggle" title="Chat with us!">
     💬
   </div>
-  
+
   <!-- Chat Box -->
   <div class="chat-box" id="chatBox">
     <div class="chat-box-header">
@@ -282,11 +283,11 @@
       </form>
     </div>
   </div>
-  
+
   <script>
-    $(document).ready(function() {
+    jQuery(document).ready(function($) {
       // Replace with your actual Google Apps Script Web App URL
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbx2mkY2x6YZmj8Hecjq5X7hlOUBC6T9HqkTHarrt-_Yzm4PaKwnqRXmpDTCv3ZriLjX/exec';
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbx8mg9mB69bsnLuXEIDUq6aWEpBI3242W7--hXwz3A0PzpWnPsZf0uMfVIJ6kb4LvDC/exec';
 
       let table; // To hold the DataTable instance
 
@@ -294,6 +295,12 @@
       fetch(scriptURL)
         .then(response => response.json())
         .then(data => {
+          if (data.error) {
+            console.error('Error from API:', data.error);
+            $('#dataCount').text('Error fetching data.');
+            return;
+          }
+
           // Populate table body with fetched data
           data.forEach(video => {
             const message = `Hello! I'm interested in the video titled "${video.title}". Here’s the link: ${video.url}`;
@@ -359,7 +366,10 @@
             autoWidth: false
           });
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          $('#dataCount').text('Error fetching data.');
+        });
 
       // Sorting controls
       $('#sortAsc').on('click', function() {
@@ -408,6 +418,6 @@
       });
     });
   </script>
-  
+
 </body>
 </html>
