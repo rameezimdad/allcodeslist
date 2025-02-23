@@ -1,4 +1,3 @@
-<!-- MRI Videos Portal -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,415 +8,486 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
-
-  <!-- Optional: DataTables Tailwind Integration (for better styling) -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.tailwind.min.css">
-
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-  <!-- DataTables JS -->
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-
   <style>
-    /* Custom Button Styles */
-    .btn {
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.25rem;
-      font-weight: bold;
-      text-align: center;
-      color: white;
-      text-decoration: none;
-      display: inline-flex;
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+    }
+
+    /* Custom Header & Layout */
+    .gradient-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    }
+    
+    .video-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .video-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                  0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .thumbnail-container {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .thumbnail-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.7) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .video-card:hover .thumbnail-overlay {
+      opacity: 1;
+    }
+    
+    .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
       align-items: center;
       justify-content: center;
-      transition: background-color 0.3s ease;
-      font-size: 0.875rem; /* Reduced font size */
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    .btn-watch { background-color: #e74c3c; } /* Red */
-    .btn-watch:hover { background-color: #c0392b; }
-    .btn-contact { background-color: #f1c40f; color: #333; } /* Yellow */
-    .btn-contact:hover { background-color: #d4ac0d; }
-    .btn-code { background-color: #27ae60; } /* Green */
-    .btn-code:hover { background-color: #1e8449; }
-    .btn-views { background-color: #a9dfbf; color: #333; } /* Light Green */
-    .btn-views:hover { background-color: #7dcea0; }
-    .btn-contact-header { background-color: #1f2937; color: white; }
-    .btn-contact-header:hover { background-color: #111827; }
-    .btn-blue { background-color: #3490dc; }
-    .btn-blue:hover { background-color: #2779bd; }
-
-    /* DataTable Styles */
-    #videoTable thead th {
-      background-color: #1f2937;
-      color: white;
-      text-align: left;
-      padding: 0.5rem;
-      font-size: 0.95rem; /* Slightly reduced font size */
-    }
-    #videoTable tbody td {
-      padding: 0.5rem;
-      vertical-align: middle;
-      white-space: nowrap;
-      font-size: 0.875rem; /* Reduced font size */
-    }
-    #videoTable tbody tr:hover {
-      background-color: #f3f4f6;
+    
+    .video-card:hover .play-icon {
+      opacity: 1;
     }
 
-    /* Fixed Table Layout to Prevent Scrollbar */
-    #videoTable {
-      table-layout: fixed;
+    /* Glowing Button Style */
+    .button-85 {
+      padding: 0.6em 2em;
+      border: none;
+      outline: none;
+      color: #fff;
+      background: #111;
+      cursor: pointer;
+      position: relative;
+      z-index: 0;
+      border-radius: 10px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      font-size: 0.875rem;
+      transition: transform 0.2s ease;
+    }
+    
+    .button-85:hover {
+      transform: scale(1.03);
+    }
+    
+    .button-85:before {
+      content: "";
+      background: linear-gradient(
+        45deg,
+        #ff0000,
+        #ff7300,
+        #fffb00,
+        #48ff00,
+        #00ffd5,
+        #002bff,
+        #7a00ff,
+        #ff00c8,
+        #ff0000
+      );
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      background-size: 400%;
+      z-index: -1;
+      filter: blur(5px);
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+      animation: glowing-button-85 20s linear infinite;
+      transition: opacity 0.3s ease-in-out;
+      border-radius: 10px;
+    }
+    
+    @keyframes glowing-button-85 {
+      0% {
+        background-position: 0 0;
+      }
+      50% {
+        background-position: 400% 0;
+      }
+      100% {
+        background-position: 0 0;
+      }
+    }
+    
+    .button-85:after {
+      z-index: -1;
+      content: "";
+      position: absolute;
       width: 100%;
-    }
-    #videoTable th, #videoTable td {
-      overflow: hidden;
-      text-overflow: ellipsis;
+      height: 100%;
+      background: #222;
+      left: 0;
+      top: 0;
+      border-radius: 10px;
     }
 
-    /* Chat Box Styles */
-    .chat-box {
-      position: fixed;
-      bottom: 80px;
-      left: 20px;
-      width: 320px;
-      max-width: 90%;
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      display: none;
-      flex-direction: column;
-      z-index: 1000;
-      transition: all 0.3s ease;
+    /* Enhanced Search Input */
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-gray-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' /%3E%3C/svg%3E") no-repeat right 1rem center;
+      background-color: #fff;
+      background-size: 1.5rem;
     }
-    .chat-box-header {
-      background-color: #1f2937;
-      color: white;
-      padding: 0.75rem;
-      border-top-left-radius: 0.5rem;
-      border-top-right-radius: 0.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
     }
-    .chat-box-header h3 {
-      margin: 0;
-      font-size: 1.1rem;
-    }
-    .chat-box-body {
-      padding: 0.75rem;
-      overflow-y: auto;
-      max-height: 300px;
-    }
-    .chat-box-footer {
-      padding: 0.75rem;
-      border-top: 1px solid #ddd;
-      display: flex;
-      justify-content: flex-end;
-    }
+
+    /* Chat Button & Box remain unchanged */
     .chat-toggle {
       position: fixed;
-      bottom: 20px;
-      left: 20px;
-      background-color: #1f2937;
-      color: white;
-      padding: 0.75rem;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 1001;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s ease;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 9999px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+      transition: background 0.2s ease, transform 0.2s ease;
     }
+    
     .chat-toggle:hover {
-      background-color: #111827;
+      background: var(--primary-dark);
+      transform: scale(1.05);
     }
-    /* Scrollbar Styles for Chat Box */
-    .chat-box-body::-webkit-scrollbar {
-      width: 6px;
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
     }
-    .chat-box-body::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0.2);
-      border-radius: 3px;
+    
+    .chat-box {
+      position: fixed;
+      bottom: 6rem;
+      right: 1.5rem;
+      width: 24rem;
+      max-width: 100%;
+      background: #fff;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+      transform-origin: bottom right;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform: scale(0);
+      opacity: 0;
     }
-    /* Responsive Table */
-    @media (max-width: 768px) {
-      #videoTable thead {
-        display: none;
-      }
-      #videoTable tbody tr {
-        display: block;
-        margin-bottom: 1rem;
-        border: 1px solid #ddd;
-        border-radius: 0.5rem;
-        padding: 0.5rem;
-        background-color: white;
-      }
-      #videoTable tbody td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.5rem;
-        border: none;
-        border-bottom: 1px solid #ddd;
-      }
-      #videoTable tbody td:last-child {
-        border-bottom: none;
-      }
-      #videoTable tbody td::before {
-        content: attr(data-label);
-        font-weight: bold;
-        width: 40%;
-        text-align: left;
-      }
+    
+    .chat-box.active {
+      transform: scale(1);
+      opacity: 1;
+    }
+    
+    .chat-header {
+      background: linear-gradient(90deg, #2563eb, #1d4ed8);
+      color: #fff;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .message-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    
+    .message-input:focus {
+      border-color: var(--primary);
     }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body class="bg-gray-50 min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="bg-white shadow">
+  <header class="gradient-header shadow-lg">
     <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-      <h1 class="text-2xl font-bold text-gray-800">MRI VIDEO PORTAL</h1>
-      <a href="https://wa.me/923224083545?text=I%20have%20a%20custom%20project%20here%20I%20will%20share%20my%20details%20with%20you." target="_blank" class="btn btn-contact-header flex items-center space-x-2">
-        <span>📞</span>
-        <span>+92 322 4083545</span>
+      <div class="flex items-center space-x-3">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
+          </path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+          </path>
+        </svg>
+        <h1 class="text-2xl font-bold text-white">MRI Video Hub</h1>
+      </div>
+      <a href="https://wa.me/923224083545" target="_blank" class="button-85">
+        Contact
       </a>
     </div>
   </header>
 
   <!-- Main Content -->
-  <div class="container mx-auto p-4 flex-grow">
-    <h2 class="text-3xl font-bold mb-4 text-center">ALL VIDEOS LINK AND TITLES OF MY CHANNEL</h2>
-    <center><h6 class="text-3xl font-bold mb-4 text-center"> In My Video Title a Code Like , B1 , R1 , C1 Like This You Can Search From That Also</h6>
-    </center>    
-    <!-- Data Count and Sorting Controls -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-4">
-      <div id="dataCount" class="text-gray-600 mb-2 md:mb-0">
-        <!-- Number of videos will be displayed here -->
-      </div>
-      <div class="flex space-x-2">
-        <button id="sortAsc" class="btn btn-blue flex items-center space-x-1">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-          </svg>
-          <span>Sort Ascending</span>
-        </button>
-        <button id="sortDesc" class="btn btn-blue flex items-center space-x-1">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-          <span>Sort Descending</span>
-        </button>
+  <main class="container mx-auto px-4 py-8 flex-grow">
+    <div class="max-w-4xl mx-auto mb-12 text-center">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Explore MRI Video Resources</h2>
+      <p class="text-gray-600 text-lg">Search through our collection of educational MRI videos and tutorials</p>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="mb-8 space-y-4">
+      <input type="text" id="searchInput" placeholder="Search videos..." class="search-input">
+      
+      <div class="flex flex-wrap gap-3 items-center justify-between">
+        <span id="dataCount" class="text-gray-600 text-sm"></span>
+        <div class="flex gap-2">
+          <button id="sortAsc" class="button-85">
+            A-Z
+          </button>
+          <button id="sortDesc" class="button-85">
+            Z-A
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Removed overflow-x-auto to eliminate horizontal scrollbar -->
-    <div>
-      <table id="videoTable" class="min-w-full bg-white rounded-lg" style="width:100%">
-        <thead>
-          <tr>
-            <th style="width:60%;">Title</th>
-            <th style="width:10%;">URL</th>
-            <th style="width:10%;">Views</th>
-            <th style="width:10%;">Contact Us</th>
-            <th style="width:10%;">Code</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Data will be populated here -->
-        </tbody>
-      </table>
+    <!-- Video Grid -->
+    <div id="videoGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Video items will be populated here -->
     </div>
-  </div>
 
-  <footer class="bg-white text-center py-4">
-    <p class="text-gray-600">&copy; 2024 Your Company. All rights reserved.</p>
+    <!-- Loading State -->
+    <div id="loading" class="text-center py-12 hidden">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <p class="text-gray-600 mt-4">Loading videos...</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 py-8 mt-16">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <h3 class="text-xl font-bold text-white mb-2">MRI Video Hub</h3>
+          <p class="text-sm">Empowering Medical Education Through Visual Learning</p>
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-300 hover:text-white transition-colors">About</a>
+          <a href="#" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+          <a href="#" class="text-gray-300 hover:text-white transition-colors">Privacy</a>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+        <p>&copy; 2024 MRI Video Hub. All rights reserved.</p>
+      </div>
+    </div>
   </footer>
 
-  <!-- Chat Toggle Button -->
-  <div class="chat-toggle" id="chatToggle" title="Chat with us!">
-    💬
+  <!-- Chat Elements -->
+  <div class="chat-toggle" id="chatToggle">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+      </path>
+    </svg>
   </div>
 
-  <!-- Chat Box -->
   <div class="chat-box" id="chatBox">
-    <div class="chat-box-header">
-      <h3>Contact Us</h3>
-      <button id="closeChat" class="text-white text-xl">&times;</button>
+    <div class="chat-header">
+      <h3 class="text-lg font-semibold">Need Help?</h3>
+      <button id="closeChat" class="p-1 hover:bg-white/10 rounded-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M6 18L18 6M6 6l12 12">
+          </path>
+        </svg>
+      </button>
     </div>
-    <div class="chat-box-body">
-      <form id="chatForm">
-        <div class="mb-3">
-          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-          <input type="text" id="name" name="name" required class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <div class="p-6 space-y-4">
+      <form id="chatForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+          <input type="text" id="name" required class="message-input">
         </div>
-        <div class="mb-3">
-          <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
-          <select id="gender" name="gender" required class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">Select Gender</option>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Other</option>
-          </select>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Your Question</label>
+          <textarea id="query" rows="3" required class="message-input"></textarea>
         </div>
-        <div class="mb-3">
-          <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
-          <input type="text" id="country" name="country" required class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        <div class="mb-3">
-          <label for="query" class="block text-sm font-medium text-gray-700">Your Query</label>
-          <textarea id="query" name="query" rows="3" required class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-        </div>
-        <div class="chat-box-footer">
-          <button type="submit" class="btn btn-blue">Submit</button>
-        </div>
+        <button type="submit" class="button-85 w-full">
+          Send Message
+          <svg class="w-5 h-5 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
+            </path>
+          </svg>
+        </button>
       </form>
     </div>
   </div>
 
   <script>
     jQuery(document).ready(function($) {
-      // Replace with your actual Google Apps Script Web App URL
       const scriptURL = 'https://script.google.com/macros/s/AKfycbx8mg9mB69bsnLuXEIDUq6aWEpBI3242W7--hXwz3A0PzpWnPsZf0uMfVIJ6kb4LvDC/exec';
+      let videosData = [];
 
-      let table; // To hold the DataTable instance
+      // DOM Elements
+      const $videoGrid = $('#videoGrid');
+      const $loading = $('#loading');
+      const $chatBox = $('#chatBox');
+      const $chatToggle = $('#chatToggle');
 
-      // Fetch data from Google Apps Script
+      // Show loading state
+      function showLoading() {
+        $videoGrid.hide();
+        $loading.show();
+      }
+
+      // Hide loading state
+      function hideLoading() {
+        $loading.hide();
+        $videoGrid.show();
+      }
+
+      // Improved video card template with updated buttons
+      function videoCard(video) {
+        const videoID = getYouTubeID(video.url);
+        const thumbnail = `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
+        const message = encodeURIComponent(`Interested in: ${video.title} - ${video.url}`);
+
+        return `
+          <div class="video-card bg-white shadow-md hover:shadow-lg">
+            <div class="thumbnail-container aspect-video">
+              <img src="${thumbnail}" alt="${video.title}" class="w-full h-full object-cover">
+              <div class="thumbnail-overlay"></div>
+              <div class="play-icon">
+                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
+                  </path>
+                </svg>
+              </div>
+            </div>
+            <div class="p-4 space-y-3">
+              <h3 class="font-semibold text-gray-900 line-clamp-2">${video.title}</h3>
+              <div class="flex items-center justify-between text-sm text-gray-600">
+                <span>${video.views} views</span>
+                <div class="flex items-center space-x-2">
+                  <a href="${video.url}" target="_blank" class="button-85">
+                    Watch
+                  </a>
+                  <a href="https://wa.me/923224083545?text=${message}" target="_blank" class="button-85">
+                    Get Code
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Render video grid
+      function renderGrid(data = videosData) {
+        $videoGrid.html(data.map(videoCard).join(''));
+        $('#dataCount').text(`Showing ${data.length} videos`);
+      }
+
+      // Fetch data with loading state
+      showLoading();
       fetch(scriptURL)
         .then(response => response.json())
         .then(data => {
-          if (data.error) {
-            console.error('Error from API:', data.error);
-            $('#dataCount').text('Error fetching data.');
-            return;
+          if (!data.error) {
+            videosData = data;
+            renderGrid();
           }
-
-          // Populate table body with fetched data
-          data.forEach(video => {
-            const message = `Hello! I'm interested in the video titled "${video.title}". Here’s the link: ${video.url}`;
-
-            $('#videoTable tbody').append(`
-              <tr>
-                <td class="font-semibold text-gray-800" data-label="Title">${video.title}</td>
-                <td class="text-center" data-label="URL">
-                  <a href="${video.url}" target="_blank" class="btn btn-watch flex items-center space-x-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 8l4.553 2.276A1 1 0 0010 10.618v6.764a1 1 0 01-1.447.894L5 14" />
-                    </svg>
-                    <span>Watch</span>
-                  </a>
-                </td>
-                <td class="text-center" data-label="Views">
-                  <span class="btn btn-views">${video.views}</span>
-                </td>
-                <td class="text-center" data-label="Contact Us">
-                  <a href="https://wa.me/923224083545" target="_blank" class="btn btn-contact flex items-center space-x-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-3.582 8-8 8H11l-4 4v-4H5a10.014 10.014 0 01-4-7c0-5.523 4.477-10 10-10s10 4.477 10 10z" />
-                    </svg>
-                    <span>Contact Us</span>
-                  </a>
-                </td>
-                <td class="text-center" data-label="Code">
-                  <a href="https://wa.me/923224083545?text=${encodeURIComponent(message)}" target="_blank" class="btn btn-code flex items-center space-x-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 18v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2m16 0h-4m0 0v-4m0 4l4-4-4-4" />
-                    </svg>
-                    <span>Code</span>
-                  </a>
-                </td>
-              </tr>
-            `);
-          });
-
-          // Display data count
-          $('#dataCount').text(`Total Videos Found: ${data.length}`);
-
-          // Initialize DataTable without responsive plus icon
-          table = $('#videoTable').DataTable({
-            responsive: false, // Disable responsive to prevent plus icon
-            language: {
-              search: "Search:",
-              lengthMenu: "Show _MENU_ entries",
-              info: "Showing _START_ to _END_ of _TOTAL_ entries",
-              paginate: {
-                previous: "Previous",
-                next: "Next"
-              }
-            },
-            // Adjust column widths to prevent wrapping
-            columnDefs: [
-              { width: '60%', targets: 0 },
-              { width: '10%', targets: 1 },
-              { width: '10%', targets: 2 },
-              { width: '10%', targets: 3 },
-              { width: '10%', targets: 4 }
-            ],
-            // Prevent DataTables from auto adjusting column widths
-            autoWidth: false
-          });
         })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-          $('#dataCount').text('Error fetching data.');
-        });
+        .catch(console.error)
+        .finally(hideLoading);
 
-      // Sorting controls
-      $('#sortAsc').on('click', function() {
-        table.order([0, 'asc']).draw();
+      // Search functionality
+      $('#searchInput').on('input', function() {
+        const term = $(this).val().toLowerCase();
+        const filtered = videosData.filter(v => 
+          v.title.toLowerCase().includes(term) ||
+          v.url.toLowerCase().includes(term)
+        );
+        renderGrid(filtered);
       });
 
-      $('#sortDesc').on('click', function() {
-        table.order([0, 'desc']).draw();
+      // Sorting functionality
+      $('#sortAsc').click(() => {
+        const sorted = [...videosData].sort((a, b) => a.title.localeCompare(b.title));
+        renderGrid(sorted);
       });
 
-      // Chat Box Toggle
-      const chatToggle = $('#chatToggle');
-      const chatBox = $('#chatBox');
-      const closeChat = $('#closeChat');
-
-      chatToggle.on('click', function() {
-        chatBox.fadeIn();
-        chatToggle.hide();
+      $('#sortDesc').click(() => {
+        const sorted = [...videosData].sort((a, b) => b.title.localeCompare(a.title));
+        renderGrid(sorted);
       });
 
-      closeChat.on('click', function() {
-        chatBox.fadeOut();
-        chatToggle.fadeIn();
-      });
+      // Chat functionality
+      $chatToggle.click(() => $chatBox.toggleClass('active'));
+      $('#closeChat').click(() => $chatBox.removeClass('active'));
 
-      // Handle Chat Form Submission
-      $('#chatForm').on('submit', function(e) {
+      // Form submission
+      $('#chatForm').submit(function(e) {
         e.preventDefault();
-        const name = $('#name').val().trim();
-        const gender = $('#gender').val();
-        const country = $('#country').val().trim();
-        const query = $('#query').val().trim();
+        const formData = {
+          name: $('#name').val(),
+          query: $('#query').val()
+        };
 
-        if (name && gender && country && query) {
-          // You can process the form data here, e.g., send to your server or WhatsApp
-          const whatsappMessage = `Name: ${name}%0AGender: ${gender}%0ACountry: ${country}%0AQuery: ${query}`;
-          window.open(`https://wa.me/923224083545?text=${whatsappMessage}`, '_blank');
-
-          // Reset form and close chat box
-          $('#chatForm')[0].reset();
-          chatBox.fadeOut();
-          chatToggle.fadeIn();
-        } else {
-          alert('Please fill in all fields.');
+        if (formData.name && formData.query) {
+          const whatsappUrl = `https://wa.me/923224083545?text=${encodeURIComponent(
+            `Name: ${formData.name}\nQuery: ${formData.query}`
+          )}`;
+          window.open(whatsappUrl, '_blank');
+          this.reset();
+          $chatBox.removeClass('active');
         }
       });
+
+      // YouTube ID parser
+      function getYouTubeID(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+      }
     });
   </script>
-
 </body>
 </html>
